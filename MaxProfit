@@ -1,0 +1,54 @@
+/**
+ * 给定一家公司在20日内的股票走势信息，这些信息包括了它每天交易的最高价(H)，最低价(L)，以及开盘价(S)。
+ * 假定你作为交易员，必须在股票开盘时做出买入活卖出的决定，你负责设计一个算法用来决定买入和卖出 的策略，使得交易获得最高的利润。
+ * profit = S[N] - Min(S[0, N-1])
+ * @author 王立强 
+ * 
+ */
+public class MaxProfit {
+
+	private final int TRADING_DAYS = 20;
+	private int buyDay = 0;
+	private int sellDay = 0;
+
+	public int[] startPrice = new int[TRADING_DAYS];
+
+	public MaxProfit() {
+		System.out.println("Starting price is:");
+		// 生成开盘价
+		for (int i = 0; i < TRADING_DAYS; i++) {
+			startPrice[i] = (int) (Math.random() * 100 + 1);
+			System.out.print(startPrice[i] + " ");
+		}
+		System.out.println("\n");
+	}
+
+	public int maxProfit() {
+		int minPrice = startPrice[0];
+		int maxProfit = 0;
+		int minDay = 0;
+		for (int N = 1; N < TRADING_DAYS; N++) {
+			if (startPrice[N - 1] < minPrice) {
+				// 记录前N个元素中的最小值
+				minDay = N - 1;
+				minPrice = startPrice[N - 1];
+			}
+			if (startPrice[N] - minPrice > maxProfit) {
+				// 第N天卖出时的最大利润
+				sellDay = N;
+				buyDay = minDay;
+				maxProfit = startPrice[N] - minPrice;
+			}
+		}
+
+		System.out.println("buy in from day: " + buyDay + ", price is: " + startPrice[buyDay]);
+		System.out.println("sell at day: " + sellDay + ", price is: " + startPrice[sellDay]);
+
+		return maxProfit;
+	}
+
+	public static void main(String[] args) {
+		MaxProfit solution = new MaxProfit();
+		System.out.println("\nThe max profit is : " + solution.maxProfit());
+	}
+}
